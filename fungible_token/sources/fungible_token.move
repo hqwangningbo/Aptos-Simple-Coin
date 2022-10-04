@@ -27,12 +27,17 @@ module my_address::fungible_token {
 //    use aptos_framework::account;
 //    use aptos_std::event::EventHandle;
 
-    /// Maximum possible coin supply.
+    /// Maximum possible token supply.
     const MAX_U128: u128 = 340282366920938463463374607431768211455;
+    /// Maximum possible token name.
     const MAX_TOKEN_NAME_LENGTH: u64 = 32;
+    /// Maximum possible token symbol.
     const MAX_TOKEN_SYMBOL_LENGTH: u64 = 10;
 
-    //error code
+    //
+    // Errors.
+    //
+
     /// Not permission
     const NOT_PERMISSION:u64 = 0;
     /// Already initialize
@@ -49,11 +54,8 @@ module my_address::fungible_token {
     const TOKEN_NAME_TOO_LONG: u64 = 6;
     /// Symbol of the token is too long
     const TOKEN_SYMBOL_TOO_LONG: u64 = 7;
-
-    const NOT_MODULE_OWNER:u64 = 8;
-    const NOT_BALANCE_DATA:u64 = 9;
-    const INSUFFICIENT_BALANCE:u64 = 10;
-    const EALREADY_HAS_BALANCE:u64 = 11;
+    /// Insufficient balance
+    const INSUFFICIENT_BALANCE:u64 = 8;
 
     struct TransferEvent has store, drop {
         from: address,
@@ -107,9 +109,9 @@ module my_address::fungible_token {
         move_to(sender,token_store);
     }
 
-    public fun token_address():address {
-    let type_info = type_info::type_of<Token>();
-    type_info::account_address(&type_info)
+    public fun token_address(): address {
+        let type_info = type_info::type_of<Token>();
+        type_info::account_address(&type_info)
     }
 
     /// Returns `true` if the token is an initialized token.
