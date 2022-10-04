@@ -1,0 +1,10 @@
+[package]
+name = "fungible_token"
+version = "0.0.0"
+
+[dependencies]
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework/", rev = "16bec80146da2f3fd28b948cf25f807e09e92e23" }
+
+[addresses]
+my_address = "0x1"
+
