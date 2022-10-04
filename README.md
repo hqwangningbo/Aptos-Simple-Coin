@@ -3,10 +3,10 @@
 ```move
 // Events
 struct TransferEvent has store, drop {
-        from: address,
-        to: address,
-        amount: u128
-    }
+    from: address,
+    to: address,
+    amount: u128
+}
 
 struct ApprovalEvent has store, drop {
     owner: address,
