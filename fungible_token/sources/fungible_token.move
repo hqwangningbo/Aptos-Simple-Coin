@@ -21,11 +21,11 @@ module my_address::fungible_token {
     use std::string::{String, length};
     use aptos_std::type_info;
     use std::error;
+    use aptos_std::event;
+    use aptos_framework::account;
+    use aptos_std::event::EventHandle;
     #[test_only]
     use std::string;
-//    use aptos_std::event;
-//    use aptos_framework::account;
-//    use aptos_std::event::EventHandle;
 
     /// Maximum possible token supply.
     const MAX_U128: u128 = 340282366920938463463374607431768211455;
@@ -75,8 +75,8 @@ module my_address::fungible_token {
 
     struct TokenStore has key {
         token: Token,
-//        transfer_event:EventHandle<TransferEvent>,
-//        approval_event:EventHandle<ApprovalEvent>,
+        transfer_event:EventHandle<TransferEvent>,
+        approval_event:EventHandle<ApprovalEvent>,
     }
     struct TokenInfo has key {
         name: String,
@@ -102,8 +102,8 @@ module my_address::fungible_token {
         };
         let token_store = TokenStore {
             token: Token { value: total_supply },
-//            transfer_event: account::new_event_handle<TransferEvent>(sender),
-//            approval_event: account::new_event_handle<ApprovalEvent>(sender),
+            transfer_event: account::new_event_handle<TransferEvent>(sender),
+            approval_event: account::new_event_handle<ApprovalEvent>(sender),
         };
         move_to(sender,token_info);
         move_to(sender,token_store);
@@ -156,8 +156,8 @@ module my_address::fungible_token {
         assert!(!is_account_registered(addr), ALREADY_REGISTER);
         let token_store = TokenStore {
             token: Token { value: 0 },
-//            transfer_event: account::new_event_handle<TransferEvent>(sender),
-//            approval_event: account::new_event_handle<ApprovalEvent>(sender),
+            transfer_event: account::new_event_handle<TransferEvent>(sender),
+            approval_event: account::new_event_handle<ApprovalEvent>(sender),
         };
         move_to(sender, token_store);
     }
@@ -197,10 +197,10 @@ module my_address::fungible_token {
         assert!(from_token_store.token.value >= amount,error::invalid_argument(INSUFFICIENT_BALANCE));
         from_token_store.token.value = from_token_store.token.value - amount;
 
-//        event::emit_event<TransferEvent>(
-//            &mut from_token_store.transfer_event,
-//            TransferEvent { from: addr , to , amount },
-//        );
+        event::emit_event<TransferEvent>(
+            &mut from_token_store.transfer_event,
+            TransferEvent { from: addr , to , amount },
+        );
 
         let to_token_store = borrow_global_mut<TokenStore>(to);
         to_token_store.token.value = to_token_store.token.value + amount;
@@ -226,6 +226,7 @@ module my_address::fungible_token {
     #[test(sender = @my_address)]
     fun initialize_should_work(sender:&signer)  acquires TokenInfo, TokenStore {
         let addr = signer::address_of(sender);
+        account::create_account_for_test(addr);
         assert!(is_token_initialized() == false, 0);
         assert!(is_account_registered(addr) == false, 0);
 
@@ -244,6 +245,7 @@ module my_address::fungible_token {
     #[test(sender = @my_address)]
     public fun register_should_work(sender:&signer) acquires TokenStore {
         let addr = signer::address_of(sender);
+        account::create_account_for_test(addr);
         assert!(is_account_registered(addr) == false, 0);
         register(sender);
         assert!(is_account_registered(addr), 0);
@@ -252,9 +254,11 @@ module my_address::fungible_token {
 
     #[test(from = @my_address ,to = @0x2)]
     public fun transfer_should_work(from:&signer,to:&signer) acquires TokenStore {
-        setup_initialize(from);
         let from_addr = signer::address_of(from);
         let to_addr = signer::address_of(to);
+        account::create_account_for_test(from_addr);
+        account::create_account_for_test(to_addr);
+        setup_initialize(from);
         register(to);
         assert!(balance_of(from_addr) == 10000000000000000000,0);
         assert!(balance_of(to_addr) == 0,0);
@@ -262,7 +266,4 @@ module my_address::fungible_token {
         assert!(balance_of(from_addr) == 8000000000000000000,0);
         assert!(balance_of(to_addr) == 2000000000000000000,0);
     }
-
-
-
 }
