@@ -16,7 +16,7 @@
 
 */
 
-module my_address::fungible_token {
+module fungible_token::fungible_token {
     use std::signer;
     use std::string::{String, length};
     use aptos_std::type_info;
@@ -87,7 +87,7 @@ module my_address::fungible_token {
         monitor_supply: bool,
     }
 
-    public fun initialize(sender:&signer,name:String,symbol:String,decimals:u8,total_supply:u128,monitor_supply: bool)  {
+    public entry fun initialize(sender:&signer,name:String,symbol:String,decimals:u8,total_supply:u128,monitor_supply: bool)  {
         let addr = signer::address_of(sender);
         assert!(addr == token_address(),error::invalid_argument(NOT_PERMISSION));
         assert!(!exists<TokenInfo>(token_address()),error::already_exists(ALREADY_INITIALIZE));
@@ -151,7 +151,7 @@ module my_address::fungible_token {
         borrow_global<TokenInfo>(token_address()).monitor_supply
     }
 
-    public fun register(sender: &signer) {
+    public entry fun register(sender: &signer) {
         let addr = signer::address_of(sender);
         assert!(!is_account_registered(addr), ALREADY_REGISTER);
         let token_store = TokenStore {
@@ -167,7 +167,7 @@ module my_address::fungible_token {
         borrow_global<TokenStore>(addr).token.value
     }
 
-    public fun mint(sender:&signer,to:address,amount:u128) acquires TokenInfo, TokenStore {
+    public entry fun mint(sender:&signer,to:address,amount:u128) acquires TokenInfo, TokenStore {
         assert!(signer::address_of(sender) == token_address(),error::permission_denied(NOT_PERMISSION));
         assert!(monitor_supply(),error::permission_denied(NOT_MONITOR_SUPPLY));
         assert!(is_account_registered(to),error::invalid_argument(NOT_REGISTER));
@@ -178,7 +178,7 @@ module my_address::fungible_token {
         token_info.total_supply = token_info.total_supply + amount
     }
 
-    public fun burn(sender:&signer,from:address,amount:u128) acquires TokenInfo, TokenStore {
+    public entry fun burn(sender:&signer,from:address,amount:u128) acquires TokenInfo, TokenStore {
         assert!(signer::address_of(sender) == token_address(),error::permission_denied(NOT_PERMISSION));
         assert!(monitor_supply(),error::permission_denied(NOT_MONITOR_SUPPLY));
         assert!(is_account_registered(from),error::invalid_argument(NOT_REGISTER));
@@ -189,7 +189,7 @@ module my_address::fungible_token {
         token_info.total_supply = token_info.total_supply - amount;
     }
 
-    public fun transfer(from:&signer,to:address,amount:u128) acquires TokenStore {
+    public entry fun transfer(from:&signer,to:address,amount:u128) acquires TokenStore {
         let addr = signer::address_of(from);
         assert!(is_account_registered(addr),error::invalid_argument(NOT_REGISTER));
         assert!(is_account_registered(to),error::invalid_argument(NOT_REGISTER));
@@ -208,7 +208,7 @@ module my_address::fungible_token {
 
     #[test]
     fun token_address_should_work()  {
-        assert!(token_address()==@my_address,0);
+        assert!(token_address()==@fungible_token,0);
     }
 
     #[test_only]
@@ -223,7 +223,7 @@ module my_address::fungible_token {
         );
     }
 
-    #[test(sender = @my_address)]
+    #[test(sender = @fungible_token)]
     fun initialize_should_work(sender:&signer)  acquires TokenInfo, TokenStore {
         let addr = signer::address_of(sender);
         account::create_account_for_test(addr);
@@ -242,7 +242,7 @@ module my_address::fungible_token {
         assert!(monitor_supply()==false,0);
     }
 
-    #[test(sender = @my_address)]
+    #[test(sender = @fungible_token)]
     public fun register_should_work(sender:&signer) acquires TokenStore {
         let addr = signer::address_of(sender);
         account::create_account_for_test(addr);
@@ -252,7 +252,7 @@ module my_address::fungible_token {
         assert!(balance_of(addr)==0, 0);
     }
 
-    #[test(from = @my_address ,to = @0x2)]
+    #[test(from = @fungible_token ,to = @0x2)]
     public fun transfer_should_work(from:&signer,to:&signer) acquires TokenStore {
         let from_addr = signer::address_of(from);
         let to_addr = signer::address_of(to);

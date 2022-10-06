@@ -6,5 +6,5 @@ version = "0.0.0"
 AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework/", rev = "16bec80146da2f3fd28b948cf25f807e09e92e23" }
 
 [addresses]
-my_address = "0x1"
+fungible_token = "0xafa14f6a40838a5891788dd441d49531bd94b0d1da0ec79d3153d921d8611464"
 
