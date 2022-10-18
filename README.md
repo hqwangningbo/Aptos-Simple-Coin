@@ -1,1 +1,1 @@
-# move-library
+# Aptos-Simple-Coin
