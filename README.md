@@ -56,7 +56,7 @@ curl --location --request POST 'http://127.0.0.1:8081/mint?amount=100000000&addr
 aptos move init --name project_name
 
 #编译move
-aptos move compiler
+aptos move compile
 
 #测试
 aptos move test
