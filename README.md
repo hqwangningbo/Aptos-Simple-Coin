@@ -101,7 +101,7 @@ aptos move run --function-id 0x1::managed_coin::mint --args address:0xaf1a16a2a1
 https://github.com/hqwangningbo/Aptos-Simple-Coin/blob/master/simple_coin_template/src/SimpleCoin.jsx
 
 ```javascript
-		connectWallet = async () => {
+    connectWallet = async () => {
         const response = await window.aptos.connect()
         console.log(response.address)
         this.setState({ address: response.address });
