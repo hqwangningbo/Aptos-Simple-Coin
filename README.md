@@ -70,7 +70,7 @@ Aptos move仓库：https://github.com/aptos-labs/aptos-core/tree/main/aptos-move
 
 想在aptos开发move得心应手，一定得熟悉aptos move代码库，例如timestamp获取时间戳，block获取当前区块高，math数学库，event事件等等，源码是最好的教程。
 
-aptos_framework部署在0x1地址下，带有entry可以直接使用命令行调用,例如：0x1::coin::transfer
+aptos_framework部署在0x1地址下，带有entry可以直接使用命令行调用,例如：0x1:: coin ::transfer
 
 调用命令：
 
