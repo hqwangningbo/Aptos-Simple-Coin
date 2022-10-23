@@ -13,7 +13,7 @@
     2. managed_coin.move讲解
     3. 发coin方式2
     4. coin.move讲解
-3. aptos.js sdk讲解
+3. aptos dapp交互
     1. 调用钱包
     2. 调用方法
 
