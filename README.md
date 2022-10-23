@@ -10,7 +10,7 @@
 
 2. 如何发coin
     1. 发coin方式1
-    2. Manage_coin.move讲解
+    2. managed_coin.move讲解
     3. 发coin方式2
     4. coin.move讲解
 3. aptos.js sdk讲解
