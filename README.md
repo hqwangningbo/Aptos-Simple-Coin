@@ -66,7 +66,7 @@ aptos move run --function-id 0x7f533d257e92a2cd676b8255d945672d738ef6307c7c4563a
 
 # 如何发coin
 
-Aptos move仓库：https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/framework
+Aptos move仓库：https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/framework ,源码是最好的教程
 
 aptos_framework部署在0x1地址下，带有entry可以直接使用命令行调用
 
